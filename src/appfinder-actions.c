@@ -458,6 +458,7 @@ xfce_appfinder_actions_expand_command (XfceAppfinderAction *action,
   const gchar *p;
   gsize        len;
   gchar       *trim;
+  gchar       *uri;
 
   if (G_UNLIKELY (action->command == NULL))
     return NULL;
@@ -479,6 +480,15 @@ xfce_appfinder_actions_expand_command (XfceAppfinderAction *action,
 
             case 'S':
               g_string_append (string, text);
+              break;
+
+            // Recreate behavior of Whisker Menu
+            case 'u':
+              trim = g_strdup (text + len);
+              uri = g_uri_escape_string(g_strchug (trim), NULL, TRUE);
+              g_string_append(string, uri);
+              g_free(uri);
+              g_free(trim);
               break;
 
             case '%':
